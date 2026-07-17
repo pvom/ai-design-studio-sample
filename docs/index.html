@@ -3,70 +3,148 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ai-design-studio-sample — asset-QA gate</title>
+  <title>ai-design-studio-sample — interactive asset-QA gate</title>
   <style>
-    :root { --bg:#0d1117; --card:#161b22; --line:#30363d; --fg:#e6edf3; --dim:#8b949e; --accent:#2f81f7; --good:#3fb950; --bad:#f85149; }
-    * { box-sizing:border-box; }
-    body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif; }
-    .wrap { max-width:820px; margin:0 auto; padding:40px 20px 80px; }
-    h1 { font-size:25px; margin:0 0 6px; }
-    .lede { color:var(--dim); margin:0 0 24px; }
-    .row { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:12px 0; }
-    .row.reject { border-left:3px solid var(--bad); } .row.approve { border-left:3px solid var(--good); }
-    .verdict { font-weight:700; } .verdict.approve { color:var(--good); } .verdict.reject { color:var(--bad); }
-    .id { color:var(--dim); font-size:13px; margin-left:8px; }
-    ul { margin:8px 0 0; padding-left:20px; } li { color:#f0883e; font-size:13.5px; }
-    code { background:#1f2630; padding:1px 6px; border-radius:5px; font-size:13px; }
-    .summary { font-size:18px; font-weight:700; margin:22px 0 8px; }
-    .rank { color:var(--dim); font-size:14px; }
-    a { color:var(--accent); }
-    .foot { color:var(--dim); font-size:13px; margin-top:30px; border-top:1px solid var(--line); padding-top:16px; }
+    :root{--bg:#0d1117;--card:#161b22;--line:#30363d;--fg:#e6edf3;--dim:#8b949e;--accent:#2f81f7;--good:#3fb950;--bad:#f85149}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif}
+    .wrap{max-width:960px;margin:0 auto;padding:32px 20px 70px}
+    h1{font-size:22px;margin:0 0 6px}.lede{color:var(--dim);margin:0 0 22px}
+    .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:720px){.cols{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+    h2{font-size:14px;margin:0 0 12px}
+    .field{margin:10px 0}.field label{display:block;color:var(--dim);font-size:12px;margin-bottom:4px}
+    input[type=text],select,textarea{width:100%;background:#0d1117;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:13px/1.4 inherit}
+    textarea{resize:vertical;min-height:52px}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+    .sw{width:24px;height:24px;border-radius:5px;border:2px solid transparent;cursor:pointer}
+    .sw.on{border-color:#fff}
+    .hint{color:var(--dim);font-size:11px;margin-top:4px}
+    .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    button{background:#21262d;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px}
+    button:hover{border-color:var(--accent)}
+    button.primary{background:#1f6feb33;border-color:#1f6feb;font-weight:600}
+    .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+    .presets button{font-size:12px;padding:5px 9px}
+    .verdict{font-size:20px;font-weight:800;margin:2px 0 8px}
+    .verdict.APPROVE{color:var(--good)}.verdict.REJECT{color:var(--bad)}
+    ul{margin:6px 0 0;padding-left:18px}li{color:#f0883e;font-size:13px;margin:3px 0}
+    .ok{color:var(--good);font-size:13px}
+    code{background:#1f2630;padding:1px 6px;border-radius:5px;font-size:12px}
+    .prev{border-radius:8px;padding:14px;margin-top:8px;font-weight:600}
+    .foot{color:var(--dim);font-size:12px;margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
+    a{color:var(--accent)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>ai-design-studio-sample</h1>
-    <p class="lede">An AI asset-QA gate: it <strong>retrieves the brand-book rules</strong> relevant to each
-      generated asset and returns an evidence-based <strong>APPROVE / REJECT</strong>, then ranks the
-      approved ones pairwise. Same idea as
-      <a href="https://github.com/pvom/agentic-qa-gate">agentic-qa-gate</a>, pointed at generated assets.
-      This is the live output on 5 synthetic assets (2 clean, 3 with planted violations).</p>
+    <h1>ai-design-studio-sample · interactive asset-QA gate</h1>
+    <p class="lede">Craft a design asset on the left and hit <strong>Judge</strong> — the <strong>real gate runs
+      in your browser</strong>: it retrieves the relevant brand-book rules and returns APPROVE/REJECT with a
+      reason per broken rule. Try planting a violation (off-palette colour, tiny contrast, banned word) and
+      watch it get caught.</p>
 
-    <div class="row approve"><span class="verdict approve">✅ APPROVE</span><span class="id">a1_hero_compliant</span></div>
-    <div class="row approve"><span class="verdict approve">✅ APPROVE</span><span class="id">a2_card_compliant</span></div>
+    <div class="cols">
+      <div class="card">
+        <h2>Asset</h2>
+        <div class="presets">
+          <button data-preset="clean">Load: clean asset</button>
+          <button data-preset="bad">Load: violating asset</button>
+        </div>
 
-    <div class="row reject">
-      <span class="verdict reject">❌ REJECT</span><span class="id">a3_offcolor_violation</span>
-      <ul>
-        <li>[R1] off-palette colour <code>#7c3aed</code></li>
-        <li>[R1] off-palette colour <code>#ff00ff</code></li>
-        <li>[R2] contrast 2.59 &lt; 4.5 (<code>#778da9</code> on <code>#e0e1dd</code>)</li>
-        <li>[R3] off-scale spacing 13px</li>
-        <li>[R4] off-scale radius 10px</li>
-        <li>[R5] unapproved font Roboto &middot; 3 font families &gt; 2</li>
-        <li>[R6] banned phrases in copy</li>
-      </ul>
-    </div>
+        <div class="field"><label>Colours used (click brand swatches to toggle; the picker adds any hex)</label>
+          <div class="swatches" id="swatches"></div>
+          <div class="row2" style="margin-top:6px">
+            <input type="text" id="customhex" placeholder="#7c3aed (add off-palette)" />
+            <button id="addhex" type="button">+ add colour</button>
+          </div>
+          <div class="hint" id="colorlist"></div>
+        </div>
 
-    <div class="row reject">
-      <span class="verdict reject">❌ REJECT</span><span class="id">a4_accent_misuse</span>
-      <ul><li>[R1] accent colour used as text (accent is button-only)</li></ul>
-    </div>
+        <div class="row2">
+          <div class="field"><label>Text colour (fg)</label><input type="text" id="fg" value="#e0e1dd"></div>
+          <div class="field"><label>Background (bg)</label><input type="text" id="bg" value="#0d1b2a"></div>
+        </div>
+        <div class="field"><label>Accent (#ffb703) used as…</label>
+          <select id="accent"><option>none</option><option>button</option><option>text</option><option>background</option></select>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Spacing values (px, comma-sep)</label><input type="text" id="spacing" value="8, 16, 24"></div>
+          <div class="field"><label>Radius values (px)</label><input type="text" id="radius" value="8"></div>
+        </div>
+        <div class="field"><label>Fonts (comma-sep)</label><input type="text" id="fonts" value="Inter"></div>
+        <div class="field"><label>Copy</label><textarea id="copy">Confident, precise mobility for modern fleets.</textarea></div>
 
-    <div class="row reject">
-      <span class="verdict reject">❌ REJECT</span><span class="id">a5_low_contrast</span>
-      <ul><li>[R2] contrast 2.09 &lt; 4.5 (<code>#778da9</code> on <code>#415a77</code>)</li></ul>
-    </div>
+        <div class="buttons"><button class="primary" id="judge">⚖️ Judge asset</button></div>
+      </div>
 
-    <div class="summary">2 / 5 approved · 3 rejected</div>
-    <div class="rank">Pairwise ranking of the approved assets (best adherence first):
-      <strong>1. a2_card_compliant</strong> (18.14) · 2. a1_hero_compliant (16.24). Head-to-head winner: a2_card_compliant.</div>
-
-    <div class="foot">
-      Reproduce: <code>node src/run.js</code> (exits non-zero on any reject, so it drops into CI) ·
-      7/7 tests · retrieval-grounded judging, an LLM judge slots in behind the same interface ·
-      <a href="https://github.com/pvom/ai-design-studio-sample">source on GitHub</a>. Synthetic brand book.
+      <div class="card">
+        <h2>Verdict <span style="color:var(--dim);font-weight:400" id="rulesnote"></span></h2>
+        <div id="preview" class="prev">Preview</div>
+        <div id="result" style="margin-top:12px"></div>
+        <div class="foot">Brand-book rules R1–R6 (palette · contrast · spacing · radius · typography · tone) are
+          retrieved per asset and evaluated live. <a href="https://github.com/pvom/ai-design-studio-sample">Source on GitHub</a>. Synthetic brand book.</div>
+      </div>
     </div>
   </div>
+
+<script>
+let BRAND=null;
+const $=id=>document.getElementById(id);
+// ---- ported color + judge logic (same as src/color.js + src/judge.js) ----
+function hexToRgb(h){h=String(h).replace('#','').trim();if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255];}
+function relLum(h){const s=hexToRgb(h).map(v=>{const c=v/255;return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);});return 0.2126*s[0]+0.7152*s[1]+0.0722*s[2];}
+function contrast(fg,bg){const l1=relLum(fg),l2=relLum(bg);const hi=Math.max(l1,l2),lo=Math.min(l1,l2);return(hi+0.05)/(lo+0.05);}
+function topics(a){const t=new Set(['palette','tone']);if(a.text_pairs&&a.text_pairs.length)t.add('contrast');if(a.spacing_px&&a.spacing_px.length)t.add('spacing');if(a.radius_px&&a.radius_px.length)t.add('radius');if(a.fonts&&a.fonts.length)t.add('typography');return t;}
+function judge(a,brand){
+  const T=topics(a);const rules=brand.rules.filter(r=>T.has(r.topic));const v=[];
+  if(T.has('palette')){const al=new Set(brand.palette.allowed_hex.map(h=>h.toLowerCase()));for(const c of a.colors||[]){if(!al.has((c||'').toLowerCase()))v.push({r:'R1',d:'off-palette colour '+c});}
+    const ao=new Set(brand.palette.accent_only_hex.map(h=>h.toLowerCase()));const base=a.accent_used_as==='text'||a.accent_used_as==='background';const uses=(a.colors||[]).some(c=>ao.has((c||'').toLowerCase()));if(uses&&base)v.push({r:'R1',d:'accent colour used as '+a.accent_used_as});}
+  if(T.has('contrast')){for(const p of a.text_pairs||[]){const ratio=contrast(p.fg,p.bg);if(ratio<brand.palette.text_min_contrast_ratio)v.push({r:'R2',d:'contrast '+ratio.toFixed(2)+' < '+brand.palette.text_min_contrast_ratio+' ('+p.fg+' on '+p.bg+')'});}}
+  if(T.has('spacing')){const sc=new Set(brand.spacing_scale_px);for(const s of a.spacing_px||[])if(!sc.has(s))v.push({r:'R3',d:'off-scale spacing '+s+'px'});}
+  if(T.has('radius')){const sc=new Set(brand.radius_scale_px);for(const r of a.radius_px||[])if(!sc.has(r))v.push({r:'R4',d:'off-scale radius '+r+'px'});}
+  if(T.has('typography')){const al=new Set(brand.typography.allowed_fonts);for(const f of a.fonts||[])if(!al.has(f))v.push({r:'R5',d:'unapproved font '+f});if((a.fonts||[]).length>brand.typography.max_font_families_per_asset)v.push({r:'R5',d:a.fonts.length+' font families > '+brand.typography.max_font_families_per_asset});}
+  if(T.has('tone')){const c=(a.copy||'').toLowerCase();for(const w of brand.tone.banned_words)if(c.includes(w.toLowerCase()))v.push({r:'R6',d:'banned phrase "'+w+'"'});}
+  return{verdict:v.length===0?'APPROVE':'REJECT',violations:v,rules:rules.map(r=>r.id)};
+}
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let selColors=[];
+function renderSwatches(){
+  $('swatches').innerHTML=BRAND.palette.allowed_hex.map(h=>'<div class="sw'+(selColors.includes(h)?' on':'')+'" data-hex="'+h+'" style="background:'+h+'" title="'+h+'"></div>').join('');
+  document.querySelectorAll('.sw').forEach(el=>el.onclick=()=>{const h=el.dataset.hex;const i=selColors.indexOf(h);if(i>=0)selColors.splice(i,1);else selColors.push(h);renderSwatches();updateColorList();});
+  updateColorList();
+}
+function updateColorList(){$('colorlist').textContent='colours: '+(selColors.length?selColors.join(', '):'(none)');}
+function readAsset(){
+  return{type:'custom',colors:selColors.slice(),
+    text_pairs:[{fg:$('fg').value.trim(),bg:$('bg').value.trim()}],
+    accent_used_as:$('accent').value,
+    spacing_px:$('spacing').value.split(',').map(s=>+s.trim()).filter(n=>!isNaN(n)),
+    radius_px:$('radius').value.split(',').map(s=>+s.trim()).filter(n=>!isNaN(n)),
+    fonts:$('fonts').value.split(',').map(s=>s.trim()).filter(Boolean),
+    copy:$('copy').value};
+}
+function run(){
+  const a=readAsset();const res=judge(a,BRAND);
+  $('rulesnote').textContent='(rules considered: '+res.rules.join(', ')+')';
+  const p=$('preview');p.style.background=a.text_pairs[0].bg;p.style.color=a.text_pairs[0].fg;p.style.fontFamily=(a.fonts[0]||'inherit');p.style.borderRadius=(a.radius_px[0]||8)+'px';p.textContent=a.copy||'Preview';
+  const cls=res.verdict;
+  $('result').innerHTML='<div class="verdict '+cls+'">'+(cls==='APPROVE'?'✅ APPROVE':'❌ REJECT')+'</div>'+
+    (res.violations.length?'<ul>'+res.violations.map(x=>'<li>['+x.r+'] '+esc(x.d)+'</li>').join('')+'</ul>':'<div class="ok">Every retrieved rule passed — on-brand.</div>');
+}
+const PRESETS={
+  clean:{colors:['#0d1b2a','#e0e1dd','#ffb703'],fg:'#e0e1dd',bg:'#0d1b2a',accent:'button',spacing:'8, 16, 24, 48',radius:'8',fonts:'Inter',copy:'Confident, precise mobility for modern fleets.'},
+  bad:{colors:['#0d1b2a','#7c3aed','#ff00ff'],fg:'#778da9',bg:'#e0e1dd',accent:'background',spacing:'8, 13, 24',radius:'10',fonts:'Inter, Roboto, Georgia',copy:'Cheap fleet cards, act now — limited time!'}
+};
+function loadPreset(k){const p=PRESETS[k];selColors=p.colors.slice();$('fg').value=p.fg;$('bg').value=p.bg;$('accent').value=p.accent;$('spacing').value=p.spacing;$('radius').value=p.radius;$('fonts').value=p.fonts;$('copy').value=p.copy;renderSwatches();run();}
+
+$('judge').onclick=run;
+$('addhex').onclick=()=>{const h=$('customhex').value.trim();if(h){if(!selColors.includes(h))selColors.push(h);$('customhex').value='';renderSwatches();}};
+document.querySelectorAll('.presets button').forEach(b=>b.onclick=()=>loadPreset(b.dataset.preset));
+
+fetch('brand.json').then(r=>r.json()).then(b=>{BRAND=b;selColors=['#0d1b2a','#e0e1dd','#ffb703'];renderSwatches();run();}).catch(e=>{$('result').textContent='Could not load brand book: '+e.message;});
+</script>
 </body>
 </html>
