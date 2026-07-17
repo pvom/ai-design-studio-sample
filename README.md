@@ -1,5 +1,7 @@
 # ai-design-studio-sample — an AI asset-QA gate grounded in a brand book
 
+**▶ Live demo: https://pvom.github.io/ai-design-studio-sample/**
+
 > ⚠️ Sanitized portfolio sample. This mirrors the quality layer of an AI design studio I
 > built (an app that generates on-brand visual assets). The brand book, assets and rules
 > here are **100% synthetic**; no client identity, real brand, or production code is
