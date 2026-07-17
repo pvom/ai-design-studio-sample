@@ -1,0 +1,6 @@
+{ "id": "a2_card_compliant", "type": "product-card",
+  "colors": ["#1b263b", "#ffffff", "#415a77"],
+  "text_pairs": [{ "fg": "#ffffff", "bg": "#1b263b" }],
+  "accent_used_as": "none",
+  "spacing_px": [4, 12, 16], "radius_px": [12],
+  "fonts": ["Inter", "Georgia"], "copy": "A warm, precise way to manage your fleet." }

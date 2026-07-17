@@ -1,0 +1,6 @@
+{ "id": "a5_low_contrast", "type": "hero-banner",
+  "colors": ["#778da9", "#415a77", "#e0e1dd"],
+  "text_pairs": [{ "fg": "#778da9", "bg": "#415a77" }],
+  "accent_used_as": "none",
+  "spacing_px": [8, 16, 32], "radius_px": [8],
+  "fonts": ["Söhne"], "copy": "Warm and precise." }

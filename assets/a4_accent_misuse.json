@@ -1,0 +1,6 @@
+{ "id": "a4_accent_misuse", "type": "product-card",
+  "colors": ["#0d1b2a", "#ffb703", "#e0e1dd"],
+  "text_pairs": [{ "fg": "#ffb703", "bg": "#0d1b2a" }],
+  "accent_used_as": "text",
+  "spacing_px": [8, 16], "radius_px": [4],
+  "fonts": ["Inter"], "copy": "Precise and confident." }

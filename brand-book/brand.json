@@ -1,0 +1,27 @@
+{
+  "name": "Aurora — synthetic brand book",
+  "_doc": "The single source of truth the asset-QA gate judges against. 100% synthetic.",
+  "palette": {
+    "allowed_hex": ["#0d1b2a", "#1b263b", "#415a77", "#778da9", "#e0e1dd", "#ffb703", "#ffffff"],
+    "text_min_contrast_ratio": 4.5,
+    "accent_only_hex": ["#ffb703"]
+  },
+  "spacing_scale_px": [0, 4, 8, 12, 16, 24, 32, 48, 64],
+  "radius_scale_px": [0, 4, 8, 12, 16],
+  "typography": {
+    "allowed_fonts": ["Inter", "Söhne", "Georgia"],
+    "max_font_families_per_asset": 2
+  },
+  "tone": {
+    "voice": ["confident", "warm", "precise"],
+    "banned_words": ["cheap", "guaranteed", "act now", "limited time"]
+  },
+  "rules": [
+    { "id": "R1", "topic": "palette", "text": "Every colour used must come from palette.allowed_hex. #ffb703 is accent-only and must not be a text or background base." },
+    { "id": "R2", "topic": "contrast", "text": "Text over background must meet a contrast ratio of at least 4.5:1 (WCAG AA)." },
+    { "id": "R3", "topic": "spacing", "text": "All paddings/margins must snap to spacing_scale_px; arbitrary values are rejected." },
+    { "id": "R4", "topic": "radius", "text": "Corner radii must come from radius_scale_px." },
+    { "id": "R5", "topic": "typography", "text": "Only allowed_fonts, at most 2 families per asset." },
+    { "id": "R6", "topic": "tone", "text": "Copy must avoid banned_words and stay in the brand voice." }
+  ]
+}

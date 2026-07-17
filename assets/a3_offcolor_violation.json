@@ -1,0 +1,6 @@
+{ "id": "a3_offcolor_violation", "type": "hero-banner",
+  "colors": ["#0d1b2a", "#7c3aed", "#ff00ff"],
+  "text_pairs": [{ "fg": "#778da9", "bg": "#e0e1dd" }],
+  "accent_used_as": "background",
+  "spacing_px": [8, 13, 24], "radius_px": [10],
+  "fonts": ["Inter", "Roboto", "Georgia"], "copy": "Cheap fleet cards, act now — limited time!" }

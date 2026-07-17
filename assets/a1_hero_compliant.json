@@ -1,0 +1,6 @@
+{ "id": "a1_hero_compliant", "type": "hero-banner",
+  "colors": ["#0d1b2a", "#e0e1dd", "#ffb703"],
+  "text_pairs": [{ "fg": "#e0e1dd", "bg": "#0d1b2a" }],
+  "accent_used_as": "button",
+  "spacing_px": [8, 16, 24, 48], "radius_px": [8],
+  "fonts": ["Inter"], "copy": "Confident, precise mobility for modern fleets." }

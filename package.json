@@ -1,0 +1,10 @@
+{
+  "name": "ai-design-studio-sample",
+  "version": "1.0.0",
+  "description": "An AI asset-QA gate: retrieve brand-book rules, judge generated assets APPROVE/REJECT with evidence, rank the approved ones.",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/run.js",
+    "test": "node test/judge.test.js"
+  }
+}
